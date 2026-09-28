@@ -198,13 +198,13 @@ function signalPercent(map) {
 // wedge U+F08FC (not U+F08F3, which is a SIM slot in this font).
 function cellularIcon(percent, kind) {
   if (kind === "off" || kind === "failed" || kind === "locked") return String.fromCodePoint(0xF08FC)
-  if (kind === "disconnected") return String.fromCodePoint(0xF08F8)
+  if (kind === "disconnected") return String.fromCodePoint(0xF08FE)
   var n = parseInt(percent, 10)
-  if (!isFinite(n) || n < 20) return String.fromCodePoint(0xF08F8)
+  if (!isFinite(n) || n < 20) return String.fromCodePoint(0xF08FE)
   if (n < 40) return String.fromCodePoint(0xF08F4)
-  if (n < 60) return String.fromCodePoint(0xF08F5)
-  if (n < 80) return String.fromCodePoint(0xF08F6)
-  return String.fromCodePoint(0xF08F7)
+  if (n < 60) return String.fromCodePoint(0xF08F6)
+  if (n < 80) return String.fromCodePoint(0xF08F8)
+  return String.fromCodePoint(0xF08FA)
 }
 
 function iconKind(state, blocking, connected) {
@@ -256,6 +256,8 @@ function pickGsmDevice(devices) {
 
 function parseStatus(raw) {
   var map = parseKeyValue(section(raw, "MODEM") || raw)
+  var radio = section(raw, "WWAN").trim().toLowerCase()
+  var radioEnabled = radio === "enabled" ? true : radio === "disabled" ? false : null
   var routeDev = parseRouteDev(section(raw, "ROUTE"))
   var connections = gsmConnections(parseNmConnections(section(raw, "NMCONN")))
   var gsmDevice = pickGsmDevice(parseNmDevices(section(raw, "NM")))
@@ -280,6 +282,7 @@ function parseStatus(raw) {
 
   return {
     ok: true,
+    radioEnabled: radioEnabled,
     state: state,
     failedReason: String(map["modem.generic.state-failed-reason"] || ""),
     powerState: String(map["modem.generic.power-state"] || ""),
@@ -329,6 +332,11 @@ function connectCommand(status) {
   return ["bash", "-c", steps.join("; ")]
 }
 
+// NetworkManager owns the radio switch and suppresses autoconnect while off.
+function radioCommand(enabled) {
+  return ["nmcli", "radio", "wwan", enabled ? "on" : "off"]
+}
+
 function disconnectCommand(status) {
   var steps = []
   if (status && status.hasNmProfile && status.profileName) {
@@ -364,6 +372,7 @@ if (typeof module !== "undefined") {
     shellQuote: shellQuote,
     enableRadioCommands: enableRadioCommands,
     connectCommand: connectCommand,
+    radioCommand: radioCommand,
     disconnectCommand: disconnectCommand
   }
 }
