@@ -32,5 +32,13 @@
   "state.registered": "登録済み",
   "state.disconnecting": "切断中",
   "state.connecting": "接続中",
-  "state.connected": "接続済み"
+  "state.connected": "接続済み",
+  "Mobile radio off": "モバイル無線はオフです",
+  "WWAN radio": "モバイル無線",
+  "Turn mobile radio off to save battery": "バッテリー節約のためモバイル無線をオフにする",
+  "Turn mobile radio on": "モバイル無線をオンにする",
+  "Radio status unavailable": "無線の状態を取得できません",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "無線をオフにすると、すべてのモバイルモデムと自動接続が無効になります。Wi-Fiはオンのままです。",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

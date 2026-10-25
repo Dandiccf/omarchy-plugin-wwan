@@ -32,5 +32,13 @@
   "state.registered": "Registriert",
   "state.disconnecting": "Verbindung wird getrennt",
   "state.connecting": "Verbindung wird hergestellt",
-  "state.connected": "Verbunden"
+  "state.connected": "Verbunden",
+  "Mobile radio off": "Mobilfunk ausgeschaltet",
+  "WWAN radio": "Mobilfunkmodul",
+  "Turn mobile radio off to save battery": "Mobilfunkmodul zum Stromsparen ausschalten",
+  "Turn mobile radio on": "Mobilfunkmodul einschalten",
+  "Radio status unavailable": "Mobilfunkstatus nicht verfügbar",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "Das Ausschalten deaktiviert alle Mobilfunkmodems und verhindert automatische Verbindungen. WLAN bleibt eingeschaltet.",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

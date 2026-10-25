@@ -78,6 +78,9 @@ ShellRoot {
           if (strings.t("Mobile data") !== "Mobile Daten") return
           check(panel.heroMeta === "Datenverbindung aktiv", "live translated active phrase")
           check(strings.formatNumber(13.1,1) === "13,1", "German number formatting")
+          service.radioEnabled=false
+          check(panel.heroMeta === "Mobilfunk ausgeschaltet", "radio off localized")
+          service.radioEnabled=true
           service.connected=false; service.state="registered"
           check(panel.heroMeta === "Registriert, nicht verbunden", "translated disconnected state")
           check(service.state === "registered", "machine state preserved")

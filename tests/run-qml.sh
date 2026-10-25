@@ -28,6 +28,7 @@ cat > "$fixture_dir/bin/nmcli" <<'STUB'
 #!/bin/sh
 [ "$LC_ALL" = C ] || exit 66
 case "$*" in
+  'radio wwan') echo enabled ;;
   '-t -f DEVICE,TYPE,STATE,CONNECTION device') echo 'mock0:gsm:connected:Mock profile' ;;
   '-t -f NAME,TYPE,DEVICE,STATE connection show') echo 'Mock profile:gsm:mock0:activated' ;;
   *) exit 97 ;;
@@ -40,7 +41,7 @@ cat > "$fixture_dir/bin/ip" <<'STUB'
 echo '1.1.1.1 dev mock0'
 STUB
 chmod 700 "$fixture_dir/bin/"*
-PATH="$fixture_dir/bin:$PATH" LC_ALL=de_AT.UTF-8 LC_MESSAGES=fr_FR.UTF-8 LANG=es_ES.UTF-8 XDG_CONFIG_HOME="$fixture_dir/config" XDG_STATE_HOME="$fixture_dir/state" QT_QPA_PLATFORM=wayland timeout 15 qs -p "$fixture_dir/test.qml" --no-color >"$fixture_dir/test.log" 2>&1 || {
+PATH="$fixture_dir/bin:$PATH" LC_ALL=de_AT.UTF-8 LC_MESSAGES=fr_FR.UTF-8 LANG=es_ES.UTF-8 XDG_CONFIG_HOME="$fixture_dir/config" XDG_STATE_HOME="$fixture_dir/state" QT_QPA_PLATFORM=${QT_QPA_PLATFORM:-wayland} timeout 15 qs -p "$fixture_dir/test.qml" --no-color >"$fixture_dir/test.log" 2>&1 || {
   cat "$fixture_dir/test.log"; exit 1;
 }
 if rg -q 'FAIL:|TypeError|ReferenceError|Failed to load configuration' "$fixture_dir/test.log" || ! rg -q 'PASS:' "$fixture_dir/test.log"; then

@@ -32,5 +32,13 @@
   "state.registered": "مسجل",
   "state.disconnecting": "جارٍ قطع الاتصال",
   "state.connecting": "جارٍ الاتصال",
-  "state.connected": "متصل"
+  "state.connected": "متصل",
+  "Mobile radio off": "الراديو الخلوي متوقف",
+  "WWAN radio": "الراديو الخلوي",
+  "Turn mobile radio off to save battery": "إيقاف الراديو الخلوي لتوفير البطارية",
+  "Turn mobile radio on": "تشغيل الراديو الخلوي",
+  "Radio status unavailable": "حالة الراديو غير متاحة",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "يؤدي إيقاف الراديو إلى تعطيل جميع أجهزة المودم الخلوية وإيقاف الاتصالات التلقائية. تظل شبكة Wi-Fi قيد التشغيل.",
+  "%1%": "%1٪",
+  "%1 · %2": "%1 · %2"
 }

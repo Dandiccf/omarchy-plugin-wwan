@@ -32,5 +32,13 @@
   "state.registered": "已注册",
   "state.disconnecting": "正在断开",
   "state.connecting": "正在连接",
-  "state.connected": "已连接"
+  "state.connected": "已连接",
+  "Mobile radio off": "移动无线电已关闭",
+  "WWAN radio": "移动无线电",
+  "Turn mobile radio off to save battery": "关闭移动无线电以节省电量",
+  "Turn mobile radio on": "开启移动无线电",
+  "Radio status unavailable": "无线电状态不可用",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "关闭无线电将禁用所有移动调制解调器并停止自动连接。Wi-Fi 保持开启。",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

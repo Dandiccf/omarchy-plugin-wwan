@@ -4,7 +4,7 @@
 Qt added a Color type that shadows the old shell's Commons.Color singleton.
 Only qualify those references in a disposable copy. Component APIs are intact.
 Usage: python3 tests/prepare-legacy-fixture.py /path/to/old/shell /tmp/fixture
-Then: BATTERY_CARE_TEST_SHELL=/tmp/fixture bash tests/run-qml.sh
+Then: PLUGIN_TEST_SHELL=/tmp/fixture bash tests/run-qml.sh
 """
 from pathlib import Path
 import re

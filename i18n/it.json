@@ -32,5 +32,13 @@
   "state.registered": "Registrato",
   "state.disconnecting": "Disconnessione",
   "state.connecting": "Connessione",
-  "state.connected": "Connesso"
+  "state.connected": "Connesso",
+  "Mobile radio off": "Radio mobile disattivata",
+  "WWAN radio": "Radio mobile",
+  "Turn mobile radio off to save battery": "Disattiva la radio mobile per risparmiare batteria",
+  "Turn mobile radio on": "Attiva la radio mobile",
+  "Radio status unavailable": "Stato della radio non disponibile",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "Disattivando la radio si disabilitano tutti i modem mobili e le connessioni automatiche. Il Wi-Fi rimane attivo.",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

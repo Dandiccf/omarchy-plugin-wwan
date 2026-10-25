@@ -105,6 +105,7 @@ Panel {
 
   BarIconButton {
     id: button
+    Accessible.name: strings.t("Mobile data")
     anchors.fill: parent
     bar: root.bar
     text: wwan.icon
@@ -180,12 +181,14 @@ Panel {
             trailingControl: Component {
               ToggleSwitch {
                 id: powerSwitch
+                Component.onCompleted: {
+                  if ("busy" in powerSwitch) powerSwitch.busy = Qt.binding(function() { return wwan.busy })
+                  if ("hasCursor" in powerSwitch) powerSwitch.hasCursor = Qt.binding(function() { return header.ringVisible })
+                }
                 Accessible.name: root.toggleHint
                 visible: root.canToggle
                 enabled: !wwan.actionRunning
                 checked: wwan.active
-                busy: wwan.busy
-                hasCursor: header.ringVisible
                 foreground: hero.foreground
                 onHovered: function(on) { if (on) header.focusHero() }
                 onToggled: wwan.toggleConnection()
@@ -205,7 +208,7 @@ Panel {
           spacing: Style.space(8)
 
           Text {
-          textFormat: Text.PlainText
+            textFormat: Text.PlainText
             width: parent.width - radioSwitch.width - parent.spacing
             anchors.verticalCenter: parent.verticalCenter
             text: strings.t("WWAN radio")
@@ -216,11 +219,13 @@ Panel {
 
           ToggleSwitch {
             id: radioSwitch
+            Component.onCompleted: {
+              if ("busy" in radioSwitch) radioSwitch.busy = Qt.binding(function() { return wwan.actionRunning })
+              if ("hasCursor" in radioSwitch) radioSwitch.hasCursor = Qt.binding(function() { return root.cursorActive && root.focusSection === "radio" })
+            }
             Accessible.name: strings.t("WWAN radio")
             checked: wwan.radioEnabled === true
             enabled: wwan.radioEnabled !== null && !wwan.actionRunning
-            busy: wwan.actionRunning
-            hasCursor: root.cursorActive && root.focusSection === "radio"
             foreground: root.foreground
             onHovered: function(on) {
               if (on) {
@@ -330,9 +335,12 @@ Panel {
     spacing: Style.space(8)
     visible: value !== ""
 
-    InfoLabel { text: infoPair.label }
-    Item { width: Math.max(0, parent.width - parent.children[0].implicitWidth - parent.children[2].implicitWidth - parent.spacing * 2); height: 1 }
-    InfoValue { text: infoPair.value }
+    InfoLabel { id: pairLabel; text: infoPair.label }
+    InfoValue {
+      width: Math.max(0, infoPair.width - pairLabel.implicitWidth - infoPair.spacing)
+      horizontalAlignment: strings.rightToLeft ? Text.AlignLeft : Text.AlignRight
+      text: infoPair.value
+    }
   }
 
   component InfoLabel: Text {

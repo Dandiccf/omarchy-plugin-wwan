@@ -32,5 +32,13 @@
   "state.registered": "Зарегистрирован",
   "state.disconnecting": "Разъединение",
   "state.connecting": "Подключение",
-  "state.connected": "Подключён"
+  "state.connected": "Подключён",
+  "Mobile radio off": "Сотовая связь выключена",
+  "WWAN radio": "Сотовый радиомодуль",
+  "Turn mobile radio off to save battery": "Выключить сотовый радиомодуль для экономии заряда",
+  "Turn mobile radio on": "Включить сотовый радиомодуль",
+  "Radio status unavailable": "Состояние радиомодуля недоступно",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "Выключение радиомодуля отключает все сотовые модемы и автоматические подключения. Wi-Fi остаётся включённым.",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

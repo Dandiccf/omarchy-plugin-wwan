@@ -32,5 +32,13 @@
   "state.registered": "등록됨",
   "state.disconnecting": "연결 해제 중",
   "state.connecting": "연결 중",
-  "state.connected": "연결됨"
+  "state.connected": "연결됨",
+  "Mobile radio off": "모바일 무선 꺼짐",
+  "WWAN radio": "모바일 무선",
+  "Turn mobile radio off to save battery": "배터리를 절약하려면 모바일 무선 끄기",
+  "Turn mobile radio on": "모바일 무선 켜기",
+  "Radio status unavailable": "무선 상태를 확인할 수 없음",
+  "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "무선을 끄면 모든 모바일 모뎀과 자동 연결이 비활성화됩니다. Wi-Fi는 켜진 상태로 유지됩니다.",
+  "%1%": "%1%",
+  "%1 · %2": "%1 · %2"
 }

@@ -133,3 +133,9 @@ bash tests/run-qml.sh
 The QML flow replaces `mmcli`, `nmcli`, and `ip` with fixtures; it does not inspect or change a real modem or connection. It checks live language switching, legacy locale fallback, modem-state labels, number formatting, and markup-shaped provider/error text. Set `PLUGIN_TEST_SHELL=/path/to/older/shell` to exercise older component APIs. When testing old source with current Qt, `python3 tests/prepare-legacy-fixture.py /path/to/older/shell /tmp/wwan-legacy-shell` makes a disposable copy with namespace-only Color qualifications. No installed Omarchy files are changed.
 
 Validated against the installed 4.5 shell and official 4.0.0/4.0.4 component fixtures. German and Arabic previews were inspected with a simulated modem. These are component compatibility checks, not full older OS/Qt installations or new physical modem tests.
+
+## Routing and signal icons
+
+The plugin does not change route metrics or turn mobile data off when Wi-Fi connects. NetworkManager chooses the route; a connected modem can remain on standby while Wi-Fi is preferred. “Not default” describes that routing state, not a modem error. Signal levels use the normal strength icons, never the alert variants.
+
+The independent WWAN radio switch is retained with translated labels, tooltips, accessibility names and keyboard shortcut `p`. Optional switch properties are detected at runtime for older UI components.

@@ -39,7 +39,7 @@ Item {
   }
   function formatNumber(value, decimals) {
     if (nativeAvailable) return nativeTranslator.formatNumber(value, decimals)
-    var locale = Qt.locale()
+    var locale = Qt.locale(root.language.replace(/-/g, "_"))
     locale.numberOptions = Locale.OmitGroupSeparator
     return Number(value).toLocaleString(locale, 'f', decimals === undefined ? (String(value).split('.')[1] || "").length : decimals)
   }

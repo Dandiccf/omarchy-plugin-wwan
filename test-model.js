@@ -147,7 +147,7 @@ assert.strictEqual(profileDown.hasNmProfile, true)
 assert.strictEqual(profileDown.profileName, "v6-telekom")
 assert.strictEqual(profileDown.connected, false)
 assert.strictEqual(Model.iconKind(profileDown.state, false, profileDown.connected), "disconnected")
-assert.strictEqual(Model.cellularIcon(38, "disconnected"), String.fromCodePoint(0xF08F8))
+assert.strictEqual(Model.cellularIcon(38, "disconnected"), String.fromCodePoint(0xF08FE))
 assertConnectScript(profileDown, ["nmcli connection up id 'v6-telekom'"])
 assertDisconnectScript(profileDown, [
   "nmcli connection down id 'v6-telekom'",
@@ -184,9 +184,9 @@ assert.strictEqual(Model.iconKind("connected", true), "locked")
 assert.strictEqual(Model.iconKind("connected", false, false), "disconnected")
 assert.strictEqual(Model.iconKind("disabled", false, false), "off")
 assert.strictEqual(Model.cellularIcon(38, "ok"), String.fromCodePoint(0xF08F4))
-assert.strictEqual(Model.cellularIcon(80, "ok"), String.fromCodePoint(0xF08F7))
+assert.strictEqual(Model.cellularIcon(80, "ok"), String.fromCodePoint(0xF08FA))
 assert.strictEqual(Model.cellularIcon(0, "off"), String.fromCodePoint(0xF08FC))
-assert.strictEqual(Model.cellularIcon(38, "disconnected"), String.fromCodePoint(0xF08F8))
+assert.strictEqual(Model.cellularIcon(38, "disconnected"), String.fromCodePoint(0xF08FE))
 pass("labels and icons")
 
 // Radio policy is independent from both the bearer and modem power state.
@@ -223,3 +223,8 @@ try {
 pass("radio actions target WWAN only and preserve failure exit codes")
 
 console.log("all tests passed")
+
+for (const [signal, code] of [[0,0xF08FE],[19,0xF08FE],[20,0xF08F4],[39,0xF08F4],[40,0xF08F6],[46,0xF08F6],[59,0xF08F6],[60,0xF08F8],[79,0xF08F8],[80,0xF08FA],[100,0xF08FA]]) {
+  assert.strictEqual(Model.cellularIcon(signal,"ok"),String.fromCodePoint(code));
+}
+pass("signal levels never use alert glyphs");
