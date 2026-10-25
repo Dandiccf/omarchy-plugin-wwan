@@ -40,5 +40,14 @@
   "Radio status unavailable": "حالة الراديو غير متاحة",
   "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "يؤدي إيقاف الراديو إلى تعطيل جميع أجهزة المودم الخلوية وإيقاف الاتصالات التلقائية. تظل شبكة Wi-Fi قيد التشغيل.",
   "%1%": "%1٪",
-  "%1 · %2": "%1 · %2"
+  "%1 · %2": "%1 · %2",
+  "Receiving": "Receiving",
+  "Sending": "Sending",
+  "Downloaded": "Downloaded",
+  "Uploaded": "Uploaded",
+  "Internet route": "Internet route",
+  "WWAN in use": "WWAN in use",
+  "Another connection in use": "Another connection in use",
+  "Internet via WWAN": "Internet via WWAN",
+  "Rates averaged over five samples. Totals reset with the interface.": "Rates averaged over five samples. Totals reset with the interface."
 }

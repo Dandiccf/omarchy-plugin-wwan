@@ -45,11 +45,20 @@ Panel {
     if (wwan.blockingUnlock) return strings.t("SIM lock blocks connect")
     if (wwan.state === "failed") return wwan.failedReason !== "" ? strings.t(wwan.failedReason, wwan.failedReason) : strings.t("Modem failed")
     if (wwan.radioEnabled === false) return strings.t("Mobile radio off")
+    if (wwan.connected && wwan.defaultRoute) return strings.t("Internet via WWAN")
     if (wwan.active) return activePhrases[phraseIndex % activePhrases.length]
     if (wwan.state === "connected") return strings.t("Disconnected")
     if (wwan.state === "registered" || wwan.state === "enabled" || wwan.state === "searching") return strings.t("Registered, disconnected")
     if (wwan.state !== "") return strings.t("state." + wwan.state, wwan.state)
     return strings.t("Checking…")
+  }
+
+  function formatBytes(value, rate) {
+    if (value < 0 || !isFinite(value)) return "—"
+    var units = ["B", "KB", "MB", "GB", "TB"]
+    var unit = 0
+    while (value >= 1000 && unit < units.length - 1) { value /= 1000; ++unit }
+    return strings.formatNumber(value, unit === 0 ? 0 : 1) + " " + units[unit] + (rate ? "/s" : "")
   }
 
   function setHeaderCursor() {
@@ -288,9 +297,29 @@ Panel {
             value: wwan.unlock
           }
           InfoPair {
-            visible: wwan.connected && !wwan.defaultRoute
-            label: strings.t("Route")
-            value: strings.t("not default")
+            visible: wwan.connected
+            objectName: "wwanInternetRoute"
+            label: strings.t("Internet route")
+            value: wwan.defaultRoute ? strings.t("WWAN in use") : strings.t("Another connection in use")
+          }
+        }
+
+        Column {
+          width: parent.width
+          visible: wwan.connected
+          spacing: Style.spacing.labelGap
+          InfoPair { label: strings.t("Receiving"); value: root.formatBytes(wwan.transfers ? wwan.transfers.rxRate : -1, true) }
+          InfoPair { label: strings.t("Sending"); value: root.formatBytes(wwan.transfers ? wwan.transfers.txRate : -1, true) }
+          InfoPair { label: strings.t("Downloaded"); value: root.formatBytes(wwan.transfers ? wwan.transfers.rx : -1, false) }
+          InfoPair { label: strings.t("Uploaded"); value: root.formatBytes(wwan.transfers ? wwan.transfers.tx : -1, false) }
+          Text {
+            textFormat: Text.PlainText
+            width: parent.width
+            text: strings.t("Rates averaged over five samples. Totals reset with the interface.")
+            color: root.dim
+            font.family: root.fontFamily
+            font.pixelSize: Style.font.caption
+            wrapMode: Text.WordWrap
           }
         }
 

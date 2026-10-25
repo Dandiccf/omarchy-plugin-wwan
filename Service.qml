@@ -38,6 +38,31 @@ Item {
   readonly property int openRefreshIntervalSec: 3
   readonly property bool busy: presenceProcess.running || statusProcess.running || actionProcess.running
 
+  property string dataInterface: ""
+  property var transfers: null
+  onDataInterfaceChanged: transfers = null
+  onConnectedChanged: if (!connected) transfers = null
+  onPanelOpenChanged: {
+    transfers = null
+    if (panelOpen && connected) counters.reload()
+  }
+
+  FileView {
+    id: counters
+    path: "/proc/net/dev"
+    printErrors: false
+    onLoaded: root.transfers = Model.transferSample(text(), root.dataInterface, Date.now(), root.transfers)
+    onLoadFailed: root.transfers = null
+  }
+
+  Timer {
+    interval: 1000
+    repeat: true
+    running: root.panelOpen && root.connected && root.dataInterface !== ""
+    triggeredOnStart: true
+    onTriggered: counters.reload()
+  }
+
   property var _status: ({})
   property string _presenceOutput: ""
   property string _statusOutput: ""
@@ -77,6 +102,8 @@ Item {
     powerState = ""
     registration = ""
     failedReason = ""
+    dataInterface = ""
+    transfers = null
     _status = {}
   }
 
@@ -119,12 +146,13 @@ Item {
     unlock = String(parsed.unlock || "")
     blockingUnlock = parsed.blockingUnlock === true
     pin2Footnote = parsed.pin2Footnote === true
-    defaultRoute = parsed.defaultRoute === true
     profileName = String(parsed.profileName || "")
     hasNmProfile = parsed.hasNmProfile === true
     powerState = String(parsed.powerState || "")
     registration = String(parsed.registration || "")
     failedReason = String(parsed.failedReason || "")
+    dataInterface = Model.ipInterface(Model.section(raw, "IPIFACE"), parsed.gsmDevice)
+    defaultRoute = parsed.defaultRoute === true || (dataInterface !== "" && parsed.routeDev === dataInterface)
     connected = parsed.connected === true
     if (_desired !== -1 && connected === (_desired === 1)) _desired = -1
   }
@@ -222,7 +250,7 @@ Item {
     running: false
     command: [
       "bash", "-c",
-      "export LC_ALL=C; printf '%s\\n' '===MODEM==='; mmcli -m any --output-keyvalue 2>/dev/null || true; printf '%s\\n' '===ROUTE==='; ip route get 1.1.1.1 2>/dev/null || true; printf '%s\\n' '===NM==='; nmcli -t -f DEVICE,TYPE,STATE,CONNECTION device 2>/dev/null || true; printf '%s\\n' '===NMCONN==='; nmcli -t -f NAME,TYPE,DEVICE,STATE connection show 2>/dev/null || true; printf '%s\\n' '===WWAN==='; nmcli radio wwan 2>/dev/null || true"
+      "export LC_ALL=C; printf '%s\\n' '===MODEM==='; mmcli -m any --output-keyvalue 2>/dev/null || true; printf '%s\\n' '===ROUTE==='; ip route get 1.1.1.1 2>/dev/null || true; printf '%s\\n' '===NM==='; nmcli -t -f DEVICE,TYPE,STATE,CONNECTION device 2>/dev/null || true; printf '%s\\n' '===NMCONN==='; nmcli -t -f NAME,TYPE,DEVICE,STATE connection show 2>/dev/null || true; printf '%s\\n' '===IPIFACE==='; nmcli -t -f GENERAL.DEVICE,GENERAL.IP-IFACE device show 2>/dev/null || true; printf '%s\\n' '===WWAN==='; nmcli radio wwan 2>/dev/null || true"
     ]
     stdout: StdioCollector {
       id: statusStdout

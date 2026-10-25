@@ -17,6 +17,22 @@ Plugin id: `io.github.serg3k.omarchy-plugin-wwan`. Listed on [Omarchy Plugins](h
 - Panel shows operator, access technology, signal, profile, and a short state line
 - Stays visible when Wi-Fi or Ethernet owns the default route
 
+“Internet via WWAN” in the panel header marks WWAN as the internet route. The panel’s Internet route row identifies whether WWAN or another connection is used
+for the route to 1.1.1.1. VPN or destination-specific routing can differ.
+
+## Live transfer statistics
+
+The connected panel shows receive/send rates, sampled once per second while open,
+and downloaded/uploaded totals from Linux interface counters. Rates use a
+time-weighted rolling average of the latest five sampling intervals (about five seconds). NetworkManager's
+IP interface mapping selects the cellular interface even when Wi-Fi owns the
+normal route. No probes or speed tests generate extra mobile traffic.
+
+Totals are for the current interface lifetime, not a billing period or a saved
+usage history. Reconnection, interface recreation or reboot can reset them.
+Unavailable counters and the first rate sample display an em dash. New labels
+are provided in English and German; other languages currently use English.
+
 ## Requirements
 
 - Omarchy **4.0.0 Quattro** or later (Quickshell bar, not Waybar)

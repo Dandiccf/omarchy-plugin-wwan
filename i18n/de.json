@@ -40,5 +40,14 @@
   "Radio status unavailable": "Mobilfunkstatus nicht verfügbar",
   "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "Das Ausschalten deaktiviert alle Mobilfunkmodems und verhindert automatische Verbindungen. WLAN bleibt eingeschaltet.",
   "%1%": "%1%",
-  "%1 · %2": "%1 · %2"
+  "%1 · %2": "%1 · %2",
+  "Receiving": "Empfangen",
+  "Sending": "Senden",
+  "Downloaded": "Heruntergeladen",
+  "Uploaded": "Hochgeladen",
+  "Internet route": "Internetroute",
+  "WWAN in use": "WWAN wird verwendet",
+  "Another connection in use": "Andere Verbindung wird verwendet",
+  "Internet via WWAN": "Internet über WWAN",
+  "Rates averaged over five samples. Totals reset with the interface.": "Raten über fünf Messwerte gemittelt. Zähler werden mit der Schnittstelle zurückgesetzt."
 }

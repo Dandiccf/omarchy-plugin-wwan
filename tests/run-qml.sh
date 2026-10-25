@@ -29,6 +29,7 @@ cat > "$fixture_dir/bin/nmcli" <<'STUB'
 [ "$LC_ALL" = C ] || exit 66
 case "$*" in
   'radio wwan') echo enabled ;;
+  '-t -f GENERAL.DEVICE,GENERAL.IP-IFACE device show') printf '%s\n' 'GENERAL.DEVICE:mock0' 'GENERAL.IP-IFACE:mock0' ;;
   '-t -f DEVICE,TYPE,STATE,CONNECTION device') echo 'mock0:gsm:connected:Mock profile' ;;
   '-t -f NAME,TYPE,DEVICE,STATE connection show') echo 'Mock profile:gsm:mock0:activated' ;;
   *) exit 97 ;;

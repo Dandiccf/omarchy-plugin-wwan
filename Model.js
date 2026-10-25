@@ -303,6 +303,49 @@ function parseStatus(raw) {
   }
 }
 
+// Resolve NetworkManager's IP interface; modem control ports are not necessarily
+// the data interface (MBIM multiplexing and PPP can use different names).
+function ipInterface(raw, device) {
+  var current = ""
+  var lines = String(raw || "").split(/\r?\n/)
+  for (var i = 0; i < lines.length; ++i) {
+    if (lines[i].indexOf("GENERAL.DEVICE:") === 0) current = lines[i].substring(15).trim()
+    if (current === device && lines[i].indexOf("GENERAL.IP-IFACE:") === 0) {
+      var iface = lines[i].substring(17).trim()
+      return /^[a-zA-Z0-9_.-]{1,15}$/.test(iface) ? iface : ""
+    }
+  }
+  return ""
+}
+
+function transferSample(raw, iface, now, previous) {
+  var lines = String(raw || "").split(/\r?\n/)
+  for (var i = 0; i < lines.length; ++i) {
+    var sep = lines[i].indexOf(":")
+    if (sep < 0 || lines[i].substring(0, sep).trim() !== iface || !iface) continue
+    var fields = lines[i].substring(sep + 1).trim().split(/\s+/)
+    if (fields.length < 16 || !/^\d+$/.test(fields[0]) || !/^\d+$/.test(fields[8])) return null
+    var rx = Number(fields[0]), tx = Number(fields[8])
+    if (!isFinite(rx) || !isFinite(tx) || rx > 9007199254740991 || tx > 9007199254740991) return null
+    var elapsed = previous ? (now - previous.time) / 1000 : 0
+    var valid = previous && previous.iface === iface && elapsed > 0 && elapsed < 10 && rx >= previous.rx && tx >= previous.tx
+    // Average the last five intervals, weighted by their actual duration.
+    // Clear history on resets, interface changes or long sampling gaps.
+    var intervals = valid ? (previous.intervals || []).slice(-4) : []
+    if (valid) intervals.push({seconds: elapsed, rx: rx - previous.rx, tx: tx - previous.tx})
+    var seconds = 0, received = 0, sent = 0
+    for (var j = 0; j < intervals.length; ++j) {
+      seconds += intervals[j].seconds
+      received += intervals[j].rx
+      sent += intervals[j].tx
+    }
+    return {iface: iface, time: now, rx: rx, tx: tx, intervals: intervals,
+            rxRate: seconds > 0 ? received / seconds : -1,
+            txRate: seconds > 0 ? sent / seconds : -1}
+  }
+  return null
+}
+
 function shellQuote(value) {
   return "'" + String(value == null ? "" : value).replace(/'/g, "'\\''") + "'"
 }
@@ -372,6 +415,8 @@ if (typeof module !== "undefined") {
     shellQuote: shellQuote,
     enableRadioCommands: enableRadioCommands,
     connectCommand: connectCommand,
+    ipInterface: ipInterface,
+    transferSample: transferSample,
     radioCommand: radioCommand,
     disconnectCommand: disconnectCommand
   }

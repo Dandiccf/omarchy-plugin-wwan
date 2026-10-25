@@ -228,3 +228,26 @@ for (const [signal, code] of [[0,0xF08FE],[19,0xF08FE],[20,0xF08F4],[39,0xF08F4]
   assert.strictEqual(Model.cellularIcon(signal,"ok"),String.fromCodePoint(code));
 }
 pass("signal levels never use alert glyphs");
+
+// Counters must follow the cellular IP interface, including MBIM child devices.
+assert.strictEqual(Model.ipInterface('GENERAL.DEVICE:wlan0\nGENERAL.IP-IFACE:wlan0\nGENERAL.DEVICE:cdc-wdm0\nGENERAL.IP-IFACE:wwan0mbim0', 'cdc-wdm0'), 'wwan0mbim0')
+assert.strictEqual(Model.ipInterface('GENERAL.DEVICE:cdc-wdm0\nGENERAL.IP-IFACE:../../bad', 'cdc-wdm0'), '')
+function counters(rx, tx) { return ' wwan0mbim0: ' + rx + ' 0 0 0 0 0 0 0 ' + tx + ' 0 0 0 0 0 0 0' }
+var first = Model.transferSample(counters(1000, 500), 'wwan0mbim0', 1000, null)
+assert.strictEqual(first.rxRate, -1)
+var second = Model.transferSample(counters(4000, 1500), 'wwan0mbim0', 3000, first)
+assert.strictEqual(second.rxRate, 1500)
+assert.strictEqual(second.txRate, 500)
+assert.strictEqual(Model.transferSample(counters(1, 1), 'wwan0mbim0', 4000, second).rxRate, -1)
+assert.strictEqual(Model.transferSample(counters(5000, 2000), 'wwan0mbim0', 30000, second).rxRate, -1)
+assert.strictEqual(Model.transferSample(counters(5000, 2000), 'wlan0', 4000, second), null)
+assert.strictEqual(Model.transferSample('wwan0mbim0: broken', 'wwan0mbim0', 4000, second), null)
+console.log('ok - cellular interface resolution, rates, resets, missing counters and stale samples')
+var smooth = Model.transferSample(counters(4000, 1500), 'wwan0mbim0', 4000, second)
+assert.strictEqual(smooth.rxRate, 1000) // 3000 bytes / 3 seconds, including idle interval
+assert.strictEqual(smooth.txRate, 1000 / 3)
+for (var tick = 5; tick <= 10; tick++) smooth = Model.transferSample(counters(4000, 1500), 'wwan0mbim0', tick * 1000, smooth)
+assert.strictEqual(smooth.rxRate, 0) // old burst leaves rolling window
+assert.strictEqual(smooth.intervals.length, 5)
+assert.strictEqual(Model.transferSample(counters(0, 0), 'wwan0mbim0', 11000, smooth).intervals.length, 0)
+console.log('ok - time-weighted rolling rates, bounded window and history reset')

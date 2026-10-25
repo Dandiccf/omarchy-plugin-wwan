@@ -64,6 +64,7 @@ ShellRoot {
           service=panel.children.find(function(child) { return child.modemPresent !== undefined })
           if (!service || !service.presenceKnown || service.busy) return
           check(service.modemPresent && service.connected && service.operatorName === "Mock Mobile", "stub-only status discovery")
+          check(service.dataInterface === "mock0", "NetworkManager cellular IP interface discovery")
           if (strings.nativeAvailable) {
             languageControl=Qt.createQmlObject('import QtQuick; import qs.Commons as C; QtObject { function setLanguage(code) { C.I18n.setLanguage(code) } }',testRoot)
             languageControl.setLanguage(Quickshell.env("PLUGIN_TEST_LANGUAGE") || "de")
@@ -76,8 +77,10 @@ ShellRoot {
             panel.open(); phase=10; return
           }
           if (strings.t("Mobile data") !== "Mobile Daten") return
-          check(panel.heroMeta === "Datenverbindung aktiv", "live translated active phrase")
+          check(panel.heroMeta === "Internet über WWAN", "live translated internet route")
           check(strings.formatNumber(13.1,1) === "13,1", "German number formatting")
+          check(panel.formatBytes(1500, true) === "1,5 KB/s", "localized transfer rate")
+          check(panel.formatBytes(-1, true) === "—", "missing transfer sample")
           service.radioEnabled=false
           check(panel.heroMeta === "Mobilfunk ausgeschaltet", "radio off localized")
           service.radioEnabled=true
@@ -102,6 +105,13 @@ ShellRoot {
             for(var n=0;n<children.length;++n) if(findLiteral(children[n],value))return true
             return false
           }
+          service.connected=true; service.defaultRoute=true
+          check(findItem(popup.contentItem,"wwanInternetRoute").value === "WWAN wird verwendet", "cellular internet route indicated")
+          service.state="connected"
+          check(panel.heroMeta === "Internet über WWAN", "prominent active internet header")
+          service.defaultRoute=false
+          check(findItem(popup.contentItem,"wwanInternetRoute").value === "Andere Verbindung wird verwendet", "alternate internet route indicated")
+          service.state="failed"
           check(findLiteral(hero,service.operatorName),"operator uses plain text")
           check(findLiteral(hero,service.failedReason.toUpperCase()),"failure uses plain text")
           check(action.textFormat === Text.PlainText && action.text === service.lastError, "error rendered as plain text")

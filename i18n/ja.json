@@ -40,5 +40,14 @@
   "Radio status unavailable": "無線の状態を取得できません",
   "Turning the radio off disables all mobile modems and stops automatic connections. Wi-Fi stays on.": "無線をオフにすると、すべてのモバイルモデムと自動接続が無効になります。Wi-Fiはオンのままです。",
   "%1%": "%1%",
-  "%1 · %2": "%1 · %2"
+  "%1 · %2": "%1 · %2",
+  "Receiving": "Receiving",
+  "Sending": "Sending",
+  "Downloaded": "Downloaded",
+  "Uploaded": "Uploaded",
+  "Internet route": "Internet route",
+  "WWAN in use": "WWAN in use",
+  "Another connection in use": "Another connection in use",
+  "Internet via WWAN": "Internet via WWAN",
+  "Rates averaged over five samples. Totals reset with the interface.": "Rates averaged over five samples. Totals reset with the interface."
 }

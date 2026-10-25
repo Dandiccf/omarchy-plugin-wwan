@@ -15,3 +15,24 @@ To use old source on current Qt, `tests/prepare-legacy-fixture.py` copies the so
 These are component compatibility tests with the current Qt/Quickshell runtime, **not complete tests of old desktop/OS installations**, modem hardware, carrier authentication or real network switching. Language catalogs still benefit from native-speaker review.
 
 The installed plugin and existing worktrees were left unchanged. The combined changes are developed in a separate worktree/branch; the radio work and existing localization implementation are preserved.
+
+## Transfer statistics and route feedback (2026-10-25)
+
+- Model tests cover cellular IP interface selection (including MBIM control/data
+  interface differences), missing/malformed counters, interface resets, stale
+  samples, and the five-interval time-weighted rolling average including idle
+  traffic and expiry of old bursts.
+- Current-shell QML tests also cover interface discovery, localized transfer
+  formatting, the prominent internet-route header and both route-row states.
+- Linux counters were read on the host's connected `wwan0` interface. No extra
+  network probes or traffic-generating speed tests are added.
+- Rates poll once per second only while the connected panel is open. Totals
+  reflect the interface lifetime; route feedback follows the existing route
+  lookup to 1.1.1.1 and can differ for VPN/destination-specific routes.
+- New statistics/route strings are translated in English and German; the
+  other eleven catalogs currently use English for these additions.
+- The bar keeps its existing signal icon without an additional route badge.
+
+The prior legacy-component compatibility results above apply to the original
+localization/radio update; the added statistics UI was checked on the current
+installed shell.
